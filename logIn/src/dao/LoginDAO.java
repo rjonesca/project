@@ -25,6 +25,8 @@ public class LoginDAO {
     public boolean authenticateUser(final String aUsername, final String aPassword) 
         throws Exception {
         
+        boolean pass = false;
+        
         // Password user typed in.
         MessageDigest md = MessageDigest.getInstance("MD5");                    
         byte[] hashedPassword = md.digest( aPassword.getBytes() );
@@ -32,13 +34,17 @@ public class LoginDAO {
         java.sql.Connection con = Connection.getConnection();
         PreparedStatement stmt = con.prepareStatement(AUTHENTICATE);
         stmt.setString(1, aUsername);
-        stmt.setString(2, hashedPassword.toString());
+        stmt.setString(2, aPassword);//hashedPassword.toString());
         ResultSet result = stmt.executeQuery();
         
+        if(result != null) {
+            pass = result.next();
+            result.close();
+        }
+        
         stmt.close();
-        con.close();
         
         //false if no records exist matching username/password, true otherwise.
-        return result.next(); 
+        return pass; 
     }
 }

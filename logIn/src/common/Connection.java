@@ -26,8 +26,7 @@ public class Connection {
         if( con == null ){
             try { 
                 Class.forName(driver).newInstance(); 
-                java.sql.Connection conn = DriverManager.getConnection(url,"care_appuser","h3!pMe"); 
-                conn.close(); 
+                con = DriverManager.getConnection(url,"care_appuser","h3!pMe");  
             } catch (Exception e) { e.printStackTrace();} 
         }
 
