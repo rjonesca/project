@@ -35,6 +35,9 @@ public class LoginDAO {
         stmt.setString(2, hashedPassword.toString());
         ResultSet result = stmt.executeQuery();
         
+        stmt.close();
+        con.close();
+        
         //false if no records exist matching username/password, true otherwise.
         return result.next(); 
     }
