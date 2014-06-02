@@ -3,6 +3,7 @@ package dao;
 import common.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import model.Contact;
 
 /**
@@ -24,7 +25,7 @@ public class ContactDAO {
      */
     public Contact createNewContact(Contact aContact) throws Exception {
         java.sql.Connection con = Connection.getConnection();
-        PreparedStatement stmt = con.prepareStatement(INSERT);
+        PreparedStatement stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
         stmt.setInt(1, aContact.getUserId());
         stmt.setString(2, aContact.getFirstName());
         stmt.setString(3, aContact.getAddress());

@@ -244,7 +244,7 @@ public class Registration extends javax.swing.JFrame {
         
         try {
             User loggedInUser = userDAO.createUser(user);
-            System.out.println(loggedInUser.getContact());
+            System.out.println(loggedInUser.getContact().getContactId());
         }catch(Exception e) {
             e.printStackTrace();
         }
