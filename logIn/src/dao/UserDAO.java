@@ -7,14 +7,21 @@ import common.Connection;
 import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import model.Contact;
+import model.User;
 
 /**
  * @author Roshun Jones
  * @version 1.0
  */
-public class LoginDAO {
+public class UserDAO {
     private static String 
             AUTHENTICATE = "select null from User where username = ? and password = ?";
+    
+    private static String INSERT = "insert into User(username, password) values(?,?)";
+    
+    private static String UPDATE = "update User set username = ?, password = ?";
+    
     /**
      * Authenticates a user with the provided username and password and values stored
      * in the database. Password will be hashed using "MD5" before sending to database.
@@ -46,5 +53,34 @@ public class LoginDAO {
         
         //false if no records exist matching username/password, true otherwise.
         return pass; 
+    }
+    
+    /**
+     * Creates a new user record.
+     * @param aUser A User object to be saved.
+     */
+    public void createUser(User aUser) throws Exception{
+        java.sql.Connection con = Connection.getConnection();
+        PreparedStatement stmt = con.prepareStatement(INSERT);
+        stmt.setString(1, aUser.getUserName());
+        stmt.setString(2, aUser.getPassword());
+        
+        //Add user to database
+        stmt.executeUpdate();
+        stmt.close();
+        
+        //Add contact entry
+        Contact contact = aUser.getContact();
+        
+        ContactDAO contactDAO = new ContactDAO();
+        contactDAO.createNewContact(contact);
+    }
+    
+    /**
+     * Updates an existing user record.
+     * @param aUser 
+     */
+    public void updateUser(User aUser) {
+        
     }
 }
