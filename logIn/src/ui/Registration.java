@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package login;
+package ui;
 
 import dao.UserDAO;
 import model.Contact;
