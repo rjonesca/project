@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package my.login;
+package login;
 
 
 import dao.LoginDAO;
@@ -204,7 +204,7 @@ public class logIn extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
-        SignIn sign = new SignIn();
+        Registration sign = new Registration();
         sign.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
