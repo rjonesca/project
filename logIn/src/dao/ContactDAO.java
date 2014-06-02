@@ -19,6 +19,7 @@ public class ContactDAO {
     /**
      * Adds a contact to the database.
      * @param aContact Contact object to save.
+     * @throws java.lang.Exception
      */
     public void createNewContact(Contact aContact) throws Exception {
         java.sql.Connection con = Connection.getConnection();

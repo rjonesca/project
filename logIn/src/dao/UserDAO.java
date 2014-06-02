@@ -7,6 +7,7 @@ import common.Connection;
 import java.security.MessageDigest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import model.Contact;
 import model.User;
 
@@ -61,16 +62,28 @@ public class UserDAO {
      */
     public void createUser(User aUser) throws Exception{
         java.sql.Connection con = Connection.getConnection();
-        PreparedStatement stmt = con.prepareStatement(INSERT);
+        PreparedStatement stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1, aUser.getUserName());
         stmt.setString(2, aUser.getPassword());
         
         //Add user to database
         stmt.executeUpdate();
+        
+        
+        ResultSet key = stmt.getGeneratedKeys();
+        int userId = -1;
+        
+        if(key != null && key.next()){
+            userId = key.getInt(1);
+        }
+        
         stmt.close();
         
         //Add contact entry
         Contact contact = aUser.getContact();
+        
+        //Set user id to contact object
+        contact.setUserId(userId);
         
         ContactDAO contactDAO = new ContactDAO();
         contactDAO.createNewContact(contact);
