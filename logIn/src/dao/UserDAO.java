@@ -58,9 +58,9 @@ public class UserDAO {
     
     /**
      * Creates a new user record.
-     * @param aUser A User object to be saved.
      */
-    public void createUser(User aUser) throws Exception{
+    public User createUser(User aUser) throws Exception{
+        
         java.sql.Connection con = Connection.getConnection();
         PreparedStatement stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1, aUser.getUserName());
@@ -69,24 +69,27 @@ public class UserDAO {
         //Add user to database
         stmt.executeUpdate();
         
-        
-        ResultSet key = stmt.getGeneratedKeys();
+        //Get generated user id
+        ResultSet user_id = stmt.getGeneratedKeys();
         int userId = -1;
         
-        if(key != null && key.next()){
-            userId = key.getInt(1);
+        if(user_id != null && user_id.next()){
+            userId = user_id.getInt(1);
         }
         
         stmt.close();
         
         //Add contact entry
-        Contact contact = aUser.getContact();
+        ContactDAO contactDAO = new ContactDAO();
+        Contact contact = contactDAO.createNewContact(aUser.getContact());
         
         //Set user id to contact object
         contact.setUserId(userId);
         
-        ContactDAO contactDAO = new ContactDAO();
-        contactDAO.createNewContact(contact);
+        aUser.setContactId(contact.getContactId());
+        aUser.setContact(contact);
+        
+        return aUser;
     }
     
     /**

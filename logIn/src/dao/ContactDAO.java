@@ -2,6 +2,7 @@ package dao;
 
 import common.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import model.Contact;
 
 /**
@@ -21,7 +22,7 @@ public class ContactDAO {
      * @param aContact Contact object to save.
      * @throws java.lang.Exception
      */
-    public void createNewContact(Contact aContact) throws Exception {
+    public Contact createNewContact(Contact aContact) throws Exception {
         java.sql.Connection con = Connection.getConnection();
         PreparedStatement stmt = con.prepareStatement(INSERT);
         stmt.setInt(1, aContact.getUserId());
@@ -34,6 +35,17 @@ public class ContactDAO {
         stmt.setString(8, aContact.getPhone());
         
         stmt.executeUpdate();
+        
+        //Get generated user id
+        ResultSet contactId = stmt.getGeneratedKeys();
+        int contact_id = -1;
+        
+        if(contactId != null && contactId.next()){
+            contact_id = contactId.getInt(1);
+            aContact.setContactId(contact_id);
+        }
         stmt.close();
+        
+        return aContact;
     }
 }

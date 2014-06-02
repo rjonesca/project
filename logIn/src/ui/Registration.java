@@ -233,18 +233,18 @@ public class Registration extends javax.swing.JFrame {
     }//GEN-LAST:event_txtLastNameActionPerformed
 
     private void buSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buSubmitActionPerformed
-        
-        Contact contact = new Contact(txtFirstName.getText(), txtLastName.getText(),
-            txtAddress.getText(), txtCity.getText(), txtState.getText(), txtZip.getText(),
-            txtCountry.getText(), txtPhone.getText());
-        
+          
         //Save user to database
+        Contact contact = new Contact(txtFirstName.getText(), txtLastName.getText(), txtAddress.getText(),
+            txtCity.getText(), txtState.getText(), txtZip.getText(), txtCountry.getText(), txtPhone.getText());
+        
         User user = new User(txtUsername.getText(), new String(txtPassword.getPassword()), contact);
                 
         UserDAO userDAO = new UserDAO();
         
         try {
-            userDAO.createUser(user);
+            User loggedInUser = userDAO.createUser(user);
+            System.out.println(loggedInUser.getContact());
         }catch(Exception e) {
             e.printStackTrace();
         }

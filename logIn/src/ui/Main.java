@@ -1,19 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ui;
 
 
 import dao.UserDAO;
+import model.User;
 /**
  *
  * @author admin
  */
 public class Main extends javax.swing.JFrame {
-
+    public User loggedInUser = null;
+    
     /**
      * Creates new form logIn
      */
@@ -194,9 +190,9 @@ public class Main extends javax.swing.JFrame {
        //it is correct close this form and open the new page with the aproprate 
        //data
         Boolean pass = false;
-        UserDAO loginDao = new UserDAO();
+        UserDAO userDao = new UserDAO();
         try {
-            pass = loginDao.authenticateUser(txtUsername.getText(), txtPassword.getText());
+            pass = userDao.authenticateUser(txtUsername.getText(), txtPassword.getText());
         }catch(Exception e){
             e.printStackTrace();
         }

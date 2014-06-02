@@ -6,6 +6,7 @@ package model;
  */
 public class User {
     private int userId = -1;
+    private int contactId = -1;
     private String userName;
     private String password;
     private Contact contact;
@@ -25,6 +26,14 @@ public class User {
         this.userId = userId;
     }
 
+    public int getContactId() {
+        return contactId;
+    }
+
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
+    }
+    
     public String getUserName() {
         return userName;
     }
