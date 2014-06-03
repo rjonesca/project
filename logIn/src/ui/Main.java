@@ -8,7 +8,7 @@ import model.User;
  * @author admin
  */
 public class Main extends javax.swing.JFrame {
-    public User loggedInUser = null;
+    public static User loggedInUser = null;
     
     /**
      * Creates new form logIn

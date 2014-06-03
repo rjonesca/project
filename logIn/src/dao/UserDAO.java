@@ -20,9 +20,10 @@ public class UserDAO {
             AUTHENTICATE = "select null from User where username = ? and password = ?";
     
     private static String INSERT = "insert into User(username, password) values(?,?)";
+    private static String INSERT_ROLE_JOIN = "insert into User_Role(user_id,role_id) " +
+            "values(?,?)";
     
-    private static String UPDATE = "update User set username = ?, password = ?";
-    
+        
     /**
      * Authenticates a user with the provided username and password and values stored
      * in the database. Password will be hashed using "MD5" before sending to database.
@@ -92,11 +93,8 @@ public class UserDAO {
         return aUser;
     }
     
-    /**
-     * Updates an existing user record.
-     * @param aUser 
-     */
-    public void updateUser(User aUser) {
-        
+    public User getUser(String aUsername) {
+        User user = null;
+        return user;
     }
 }
