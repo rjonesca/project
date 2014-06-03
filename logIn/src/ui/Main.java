@@ -37,11 +37,11 @@ public class Main extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         dpSignup = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        buRegister = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        dpInformation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Welcome to Medical Care Alliance", 0, 0, new java.awt.Font("Agency FB", 1, 14))); // NOI18N
+        dpInformation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Welcome to Medical Care Alliance", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Agency FB", 1, 14))); // NOI18N
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -62,7 +62,7 @@ public class Main extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
         );
 
-        dpSignin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign In", 0, 0, new java.awt.Font("Agency FB", 1, 14))); // NOI18N
+        dpSignin.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign In", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Agency FB", 1, 14))); // NOI18N
 
         jLabel1.setText(" User Name");
         jLabel1.setAlignmentX(0.5F);
@@ -122,16 +122,16 @@ public class Main extends javax.swing.JFrame {
         buLogin.getAccessibleContext().setAccessibleName("Sign In");
         jLabel2.getAccessibleContext().setAccessibleName("Password");
 
-        dpSignup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign Up", 0, 0, new java.awt.Font("Agency FB", 1, 14))); // NOI18N
+        dpSignup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sign Up", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Agency FB", 1, 14))); // NOI18N
 
         jLabel3.setText("First time User ?");
 
-        jButton2.setText("Click Here");
-        jButton2.setMaximumSize(new java.awt.Dimension(63, 23));
-        jButton2.setMinimumSize(new java.awt.Dimension(63, 23));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        buRegister.setText("Click Here");
+        buRegister.setMaximumSize(new java.awt.Dimension(63, 23));
+        buRegister.setMinimumSize(new java.awt.Dimension(63, 23));
+        buRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buRegisterActionPerformed(evt);
             }
         });
 
@@ -143,7 +143,7 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(dpSignupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(buRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         dpSignupLayout.setVerticalGroup(
@@ -151,7 +151,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(dpSignupLayout.createSequentialGroup()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(buRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 9, Short.MAX_VALUE))
         );
 
@@ -165,7 +165,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(dpInformation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dpSignin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dpSignup, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 317, Short.MAX_VALUE))
+                .addGap(0, 14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,22 +196,27 @@ public class Main extends javax.swing.JFrame {
             
             if(user != null) {
                 pass = user.getPassword().equals(txtPassword.getText());
+                if(pass) {
+                    loggedInUser = user;
+                    this.getContentPane().removeAll();
+                    if(user.getRole().equals("Admin"))
+                        this.setContentPane(new AdministratorView(this));
+                    else
+                        this.setContentPane(new VolunteerView());
+                    
+                    this.revalidate();
+                    this.repaint();
+                }
             }
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-        String message = (pass)? "Passed" : "Failed";
-        System.out.println(message);
-        
-        this.dispose();
     }//GEN-LAST:event_buLoginActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.dispose();
+    private void buRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buRegisterActionPerformed
         Registration sign = new Registration();
         sign.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_buRegisterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,10 +255,10 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buLogin;
+    private javax.swing.JButton buRegister;
     private javax.swing.JPanel dpInformation;
     private javax.swing.JPanel dpSignin;
     private javax.swing.JPanel dpSignup;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

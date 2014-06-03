@@ -59,6 +59,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="buSubmit" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="buCancel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -172,7 +174,10 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="rbVolunteer" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                  <Component id="buSubmit" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="buSubmit" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="buCancel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -302,6 +307,14 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Check this box if you would like to be a volunteer."/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="buCancel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Cancel"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buCancelActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

@@ -1,22 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ui;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 /**
  *
  * @author Roshun Jones
  */
 public class AdministratorView extends javax.swing.JPanel {
-
-    /**
-     * Creates new form HelpeeView
-     */
-    public AdministratorView() {
+    private JFrame owner = null;
+    
+    public AdministratorView(JFrame owner) {
         initComponents();
+        setVisible(true);
+        this.owner = owner;
     }
 
     /**
@@ -57,6 +54,11 @@ public class AdministratorView extends javax.swing.JPanel {
         laAvailable1.setText("Interested Volunteers:");
 
         buAddService.setText("Add Service");
+        buAddService.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buAddServiceActionPerformed(evt);
+            }
+        });
 
         tblAvailable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -117,6 +119,12 @@ public class AdministratorView extends javax.swing.JPanel {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void buAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAddServiceActionPerformed
+        NewServiceDialog serviceDlg = new NewServiceDialog(owner, true);
+        serviceDlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        serviceDlg.setVisible(true);
+    }//GEN-LAST:event_buAddServiceActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

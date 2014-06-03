@@ -58,6 +58,7 @@ public class Registration extends javax.swing.JFrame {
         txtPhone = new javax.swing.JTextField();
         rbAdmin = new javax.swing.JRadioButton();
         rbVolunteer = new javax.swing.JRadioButton();
+        buCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -122,6 +123,13 @@ public class Registration extends javax.swing.JFrame {
 
         rbVolunteer.setText("Check this box if you would like to be a volunteer.");
 
+        buCancel.setText("Cancel");
+        buCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,6 +139,8 @@ public class Registration extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(buSubmit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buCancel)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,7 +229,9 @@ public class Registration extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(rbVolunteer)
                 .addGap(12, 12, 12)
-                .addComponent(buSubmit)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buSubmit)
+                    .addComponent(buCancel))
                 .addGap(7, 7, 7))
         );
 
@@ -269,14 +281,20 @@ public class Registration extends javax.swing.JFrame {
             e.printStackTrace();
         }
         
+        this.dispose();
     }//GEN-LAST:event_buSubmitActionPerformed
 
     private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPhoneActionPerformed
 
+    private void buCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_buCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Username;
+    private javax.swing.JButton buCancel;
     private javax.swing.JButton buSubmit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
