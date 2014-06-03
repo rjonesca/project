@@ -76,6 +76,7 @@ public class UserDAO {
         
         if(user_id != null && user_id.next()){
             userId = user_id.getInt(1);
+            aUser.setUserId(userId);
         }
         
         stmt.close();
@@ -113,6 +114,7 @@ public class UserDAO {
             user = new User(result.getString("username"), result.getString("password"), contact);
             user.setRole(result.getString("role"));
             user.setContactId(result.getInt("contact_id"));
+            user.setUserId(result.getInt("user_id"));
         }
         
         return user;

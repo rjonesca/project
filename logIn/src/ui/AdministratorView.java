@@ -8,9 +8,9 @@ import javax.swing.WindowConstants;
  * @author Roshun Jones
  */
 public class AdministratorView extends javax.swing.JPanel {
-    private JFrame owner = null;
+    private Main owner = null;
     
-    public AdministratorView(JFrame owner) {
+    public AdministratorView(Main owner) {
         initComponents();
         setVisible(true);
         this.owner = owner;

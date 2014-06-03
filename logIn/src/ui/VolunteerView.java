@@ -1,5 +1,7 @@
 package ui;
 
+import javax.swing.JComboBox;
+
 /**
  *
  * @author Roshun Jones
@@ -11,6 +13,9 @@ public class VolunteerView extends javax.swing.JPanel {
      */
     public VolunteerView() {
         initComponents();
+        
+        cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "City","State","Zip","Country"}));
+
         setVisible(true);
     }
 

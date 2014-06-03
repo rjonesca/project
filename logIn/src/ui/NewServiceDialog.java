@@ -1,17 +1,30 @@
 package ui;
 
+import dao.ServiceDAO;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import model.Location;
+import model.Service;
+import model.User;
+
 /**
  *
  * @author Roshun Jones
  */
 public class NewServiceDialog extends javax.swing.JDialog {
-
+    private Main owner;
+    
     /**
      * Creates new form NewServiceDialog
      */
-    public NewServiceDialog(java.awt.Frame parent, boolean modal) {
+    public NewServiceDialog(Main parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        this.setLocation(x, y);
+        owner = parent;
     }
 
     /**
@@ -25,9 +38,7 @@ public class NewServiceDialog extends javax.swing.JDialog {
 
         laTitle = new javax.swing.JLabel();
         laStartDate = new javax.swing.JLabel();
-        txtStartDate = new javax.swing.JTextField();
         laEndDate = new javax.swing.JLabel();
-        txtEndDate = new javax.swing.JTextField();
         laServiceTitle = new javax.swing.JLabel();
         txtTitle = new javax.swing.JTextField();
         spDescription = new javax.swing.JScrollPane();
@@ -35,6 +46,16 @@ public class NewServiceDialog extends javax.swing.JDialog {
         laDescription = new javax.swing.JLabel();
         buSave = new javax.swing.JButton();
         buCancel = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtCity = new javax.swing.JTextField();
+        laState = new javax.swing.JLabel();
+        txtState = new javax.swing.JTextField();
+        laZip = new javax.swing.JLabel();
+        txtZip = new javax.swing.JTextField();
+        laZip1 = new javax.swing.JLabel();
+        txtCountry = new javax.swing.JTextField();
+        txtStartDate = new javax.swing.JFormattedTextField(new java.util.Date());
+        txtEndDate = new javax.swing.JFormattedTextField(new java.util.Date());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -53,6 +74,11 @@ public class NewServiceDialog extends javax.swing.JDialog {
         laDescription.setText("Description:");
 
         buSave.setText("Save");
+        buSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buSaveActionPerformed(evt);
+            }
+        });
 
         buCancel.setText("Cancel");
         buCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -61,30 +87,61 @@ public class NewServiceDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setText("City:");
+
+        laState.setText("State:");
+
+        laZip.setText("Zip:");
+
+        laZip1.setText("Country:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(buSave)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buCancel))
-                    .addComponent(spDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(laStartDate)
-                            .addComponent(laServiceTitle)
-                            .addComponent(laDescription)
-                            .addComponent(txtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(spDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                        .addComponent(txtTitle)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(laStartDate)
+                                .addComponent(laServiceTitle)
+                                .addComponent(laDescription))
+                            .addGap(36, 36, 36)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(laEndDate)
+                                .addComponent(laTitle)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(buSave)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(buCancel))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(txtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(laEndDate)
-                            .addComponent(laTitle)
-                            .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(txtTitle))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(133, 133, 133))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(laZip)
+                                .addGap(138, 138, 138)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(laZip1)
+                            .addComponent(laState)
+                            .addComponent(txtState, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -96,11 +153,11 @@ public class NewServiceDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(laStartDate)
                     .addComponent(laEndDate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(laServiceTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -108,11 +165,30 @@ public class NewServiceDialog extends javax.swing.JDialog {
                 .addComponent(laDescription)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(spDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buSave)
-                    .addComponent(buCancel))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(laZip)
+                            .addComponent(laZip1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtZip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(buSave)
+                            .addComponent(buCancel)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(laState, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         pack();
@@ -122,18 +198,48 @@ public class NewServiceDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_buCancelActionPerformed
 
+    private void buSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buSaveActionPerformed
+        User user = owner.loggedInUser;
+        Service service = new Service(user.getUserId(), 
+                (java.util.Date)txtStartDate.getValue(), (java.util.Date)txtEndDate.getValue(),
+                txtTitle.getText(), taDescription.getText());
+        
+        Location location = new Location(txtCity.getText(), txtState.getText(), 
+                txtZip.getText(), txtCountry.getText());
+        
+        service.setLocation(location);
+        
+        //Save Service
+        ServiceDAO serviceDao = new ServiceDAO();
+        try {
+            serviceDao.createNewService(service);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        this.dispose();
+    }//GEN-LAST:event_buSaveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buCancel;
     private javax.swing.JButton buSave;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel laDescription;
     private javax.swing.JLabel laEndDate;
     private javax.swing.JLabel laServiceTitle;
     private javax.swing.JLabel laStartDate;
+    private javax.swing.JLabel laState;
     private javax.swing.JLabel laTitle;
+    private javax.swing.JLabel laZip;
+    private javax.swing.JLabel laZip1;
     private javax.swing.JScrollPane spDescription;
     private javax.swing.JTextArea taDescription;
-    private javax.swing.JTextField txtEndDate;
-    private javax.swing.JTextField txtStartDate;
+    private javax.swing.JTextField txtCity;
+    private javax.swing.JTextField txtCountry;
+    private javax.swing.JFormattedTextField txtEndDate;
+    private javax.swing.JFormattedTextField txtStartDate;
+    private javax.swing.JTextField txtState;
     private javax.swing.JTextField txtTitle;
+    private javax.swing.JTextField txtZip;
     // End of variables declaration//GEN-END:variables
 }
