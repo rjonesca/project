@@ -2,6 +2,13 @@ package ui;
 
 
 import dao.UserDAO;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import model.User;
 /**
  *
@@ -15,6 +22,25 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - this.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
+        this.setLocation(x, y);
+        
+        //Setup menu
+        JMenuBar menuBar = new JMenuBar();
+        this.setJMenuBar(menuBar);
+        
+        JMenu menu = new JMenu("File");
+        JMenuItem exitMenu = new JMenuItem("Exit");
+        menu.add(exitMenu);
+        exitMenu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        
+        menuBar.add(menu);
     }
 
     /**
@@ -175,7 +201,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(dpSignin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(dpSignup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 39, Short.MAX_VALUE))
         );
 
         pack();
