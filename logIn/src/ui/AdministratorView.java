@@ -9,7 +9,8 @@ import javax.swing.WindowConstants;
  */
 public class AdministratorView extends javax.swing.JPanel {
     private Main owner = null;
-    private String[] columnNames = {"Service ID","Title","Start Date","End Date","Description"};
+    private String[] columnNames = {"Service ID","Title","Start Date","End Date",
+        "Description", "City","State","Zip","Country"};
     
     public AdministratorView(Main owner) {
         initComponents();
@@ -38,7 +39,7 @@ public class AdministratorView extends javax.swing.JPanel {
 
         laTitle.setText("Administrator View");
 
-        laAvailable.setText("Available Services:");
+        laAvailable.setText("My Services:");
 
         tblVolunteers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,25 +85,25 @@ public class AdministratorView extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(laAvailable))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(laAvailable1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(buAddService))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(191, 191, 191)
-                        .addComponent(laTitle)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(laAvailable))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(buAddService)
+                            .addComponent(laAvailable1))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 19, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 662, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(276, 276, 276)
+                .addComponent(laTitle)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +134,7 @@ public class AdministratorView extends javax.swing.JPanel {
         ServiceDAO serviceDao = new ServiceDAO();
         Object[][] data = null;
         try {
-            data = serviceDao.getAvailableServices();
+            data = serviceDao.getConnectedServices(owner.loggedInUser.getUserId());
         } catch(Exception e) {
             e.printStackTrace();
         }

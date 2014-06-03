@@ -1,24 +1,42 @@
 package ui;
 
-import javax.swing.JComboBox;
+import dao.ServiceDAO;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Roshun Jones
  */
-public class VolunteerView extends javax.swing.JPanel {
-
+public class VolunteerView extends javax.swing.JPanel implements ListSelectionListener{
+    
+    private String[] columnNames = {"Service ID","Title","Start Date","End Date",
+        "Description", "City","State","Zip","Country"};
+   
+    private Main owner;
     /**
      * Creates new form VolunteerView
      */
-    public VolunteerView() {
+    public VolunteerView(Main aOwner) {
+        owner = aOwner;
         initComponents();
-        
-        cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "City","State","Zip","Country"}));
-
         setVisible(true);
+        cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "City","State","Zip","Country"}));
+        buConnection.setEnabled(false);
+        ServiceDAO serviceDao = new ServiceDAO();
+        Object[][] data = null;
+        try {
+            data = 
+                    serviceDao.getConnectedServices(owner.loggedInUser.getUserId());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+      
+        tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        //tblConnections.getSelectionModel().addListSelectionListener(this);
     }
-
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,11 +51,11 @@ public class VolunteerView extends javax.swing.JPanel {
         laTitle = new javax.swing.JLabel();
         laAvailable = new javax.swing.JLabel();
         cbSearch = new javax.swing.JComboBox();
-        jTextField1 = new javax.swing.JTextField();
+        txtCriteriaValue = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         buSearch = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblAvailable1 = new javax.swing.JTable();
+        tblConnections = new javax.swing.JTable();
         laConnections = new javax.swing.JLabel();
         buConnection = new javax.swing.JButton();
 
@@ -63,8 +81,13 @@ public class VolunteerView extends javax.swing.JPanel {
         jLabel1.setText("Search Criteria:");
 
         buSearch.setText("Search");
+        buSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buSearchActionPerformed(evt);
+            }
+        });
 
-        tblAvailable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblConnections.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -75,11 +98,16 @@ public class VolunteerView extends javax.swing.JPanel {
                 "Service ID", "Title", "Start Date", "End Date", "Description"
             }
         ));
-        jScrollPane3.setViewportView(tblAvailable1);
+        jScrollPane3.setViewportView(tblConnections);
 
         laConnections.setText("My Connections:");
 
         buConnection.setText("Make Connection");
+        buConnection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buConnectionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -97,19 +125,19 @@ public class VolunteerView extends javax.swing.JPanel {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(txtCriteriaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel1)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(buSearch)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(buConnection))
                                     .addComponent(laConnections)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
                                     .addComponent(jScrollPane3)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(185, 185, 185)
+                        .addGap(280, 280, 280)
                         .addComponent(laTitle)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,20 +152,62 @@ public class VolunteerView extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCriteriaValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buSearch)
                     .addComponent(buConnection))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(laConnections)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buSearchActionPerformed
+        ServiceDAO serviceDao = new ServiceDAO();
+        Object[][] data = null;
+        try {
+            data = 
+                    serviceDao.getAvailableServices((String)cbSearch.getSelectedItem(),txtCriteriaValue.getText());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+      
+        tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        tblAvailable.getSelectionModel().addListSelectionListener(this);
+        this.revalidate();
+        this.repaint();   
+    }//GEN-LAST:event_buSearchActionPerformed
+
+    private void buConnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buConnectionActionPerformed
+        int[] selectedRows = tblAvailable.getSelectedRows();
+        ServiceDAO serviceDao = new ServiceDAO();
+        
+        for(int i = 0; i< selectedRows.length; i++) {
+            try {
+                serviceDao.makeConnection(owner.loggedInUser.getUserId(), 
+                        (Integer)tblAvailable.getModel().getValueAt(selectedRows[i], 0));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }   
+        }
+        
+        Object[][] data = null;
+        try {
+            data = 
+                    serviceDao.getConnectedServices(owner.loggedInUser.getUserId());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+      
+        tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        tblConnections.getSelectionModel().addListSelectionListener(this);
+        this.revalidate();
+        this.repaint();   
+    }//GEN-LAST:event_buConnectionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buConnection;
@@ -146,11 +216,16 @@ public class VolunteerView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel laAvailable;
     private javax.swing.JLabel laConnections;
     private javax.swing.JLabel laTitle;
     private javax.swing.JTable tblAvailable;
-    private javax.swing.JTable tblAvailable1;
+    private javax.swing.JTable tblConnections;
+    private javax.swing.JTextField txtCriteriaValue;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        buConnection.setEnabled(true);
+    }
 }
