@@ -192,7 +192,11 @@ public class Main extends javax.swing.JFrame {
         Boolean pass = false;
         UserDAO userDao = new UserDAO();
         try {
-            pass = userDao.authenticateUser(txtUsername.getText(), txtPassword.getText());
+            User user = userDao.getUser(txtUsername.getText());
+            
+            if(user != null) {
+                pass = user.getPassword().equals(txtPassword.getText());
+            }
         }catch(Exception e){
             e.printStackTrace();
         }

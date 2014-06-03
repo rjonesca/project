@@ -12,8 +12,8 @@ import model.Contact;
  */
 public class ContactDAO {
     private static String 
-            INSERT = "insert into Contact(user_id, name, address, city, state, zip, country, phone) " +
-                "values(?,?,?,?,?,?,?,?)";
+            INSERT = "insert into Contact(user_id, firstName, lastName, address, city, state, zip, country, phone) " +
+                "values(?,?,?,?,?,?,?,?,?)";
             
     private static String 
             UPDATE = "update Contact set name=?, address=?, city=?, state=?, zip=?, country=?, phone=?";
@@ -28,12 +28,13 @@ public class ContactDAO {
         PreparedStatement stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
         stmt.setInt(1, aContact.getUserId());
         stmt.setString(2, aContact.getFirstName());
-        stmt.setString(3, aContact.getAddress());
-        stmt.setString(4, aContact.getCity());
-        stmt.setString(5, aContact.getState());
-        stmt.setString(6, aContact.getZip());
-        stmt.setString(7, aContact.getCountry());
-        stmt.setString(8, aContact.getPhone());
+        stmt.setString(3, aContact.getLastName());
+        stmt.setString(4, aContact.getAddress());
+        stmt.setString(5, aContact.getCity());
+        stmt.setString(6, aContact.getState());
+        stmt.setString(7, aContact.getZip());
+        stmt.setString(8, aContact.getCountry());
+        stmt.setString(9, aContact.getPhone());
         
         stmt.executeUpdate();
         

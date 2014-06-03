@@ -7,6 +7,7 @@
 package ui;
 
 import dao.UserDAO;
+import javax.swing.ButtonGroup;
 import model.Contact;
 import model.User;
 
@@ -15,11 +16,13 @@ import model.User;
  * @author admin
  */
 public class Registration extends javax.swing.JFrame {
-    /**
-     * Creates new form SignIn
-     */
+  
     public Registration() {
         initComponents();
+        ButtonGroup group = new ButtonGroup();
+        group.add(rbAdmin);
+        group.add(rbVolunteer);
+        rbVolunteer.setSelected(true);
     }
 
     /**
@@ -254,7 +257,9 @@ public class Registration extends javax.swing.JFrame {
             txtCity.getText(), txtState.getText(), txtZip.getText(), txtCountry.getText(), txtPhone.getText());
         
         User user = new User(txtUsername.getText(), new String(txtPassword.getPassword()), contact);
-                
+        String role = (rbAdmin.isSelected()) ? "Admin":"Volunteer";
+        user.setRole(role);
+        
         UserDAO userDAO = new UserDAO();
         
         

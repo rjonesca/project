@@ -19,10 +19,10 @@ public class UserDAO {
     private static String 
             AUTHENTICATE = "select null from User where username = ? and password = ?";
     
-    private static String INSERT = "insert into User(username, password) values(?,?)";
-    private static String INSERT_ROLE_JOIN = "insert into User_Role(user_id,role_id) " +
-            "values(?,?)";
-    
+    private static String INSERT = "insert into User(username, password, role) values(?,?,?)";
+    private static String GET_USER = "select * from User a"
+            + "                         inner join Contact b on a.user_id = b.user_id"
+            + "                       where a.username = ?";
         
     /**
      * Authenticates a user with the provided username and password and values stored
@@ -61,11 +61,11 @@ public class UserDAO {
      * Creates a new user record.
      */
     public User createUser(User aUser) throws Exception{
-        
         java.sql.Connection con = Connection.getConnection();
         PreparedStatement stmt = con.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
         stmt.setString(1, aUser.getUserName());
         stmt.setString(2, aUser.getPassword());
+        stmt.setString(3, aUser.getRole());
         
         //Add user to database
         stmt.executeUpdate();
@@ -82,19 +82,39 @@ public class UserDAO {
         
         //Add contact entry
         ContactDAO contactDAO = new ContactDAO();
-        Contact contact = contactDAO.createNewContact(aUser.getContact());
         
         //Set user id to contact object
-        contact.setUserId(userId);
+        aUser.getContact().setUserId(userId);
         
+        Contact contact = contactDAO.createNewContact(aUser.getContact());
         aUser.setContactId(contact.getContactId());
         aUser.setContact(contact);
         
         return aUser;
     }
     
-    public User getUser(String aUsername) {
+    public User getUser(String aUsername) throws Exception {
         User user = null;
+        Contact contact = null;
+        
+        java.sql.Connection con = Connection.getConnection();
+        PreparedStatement stmt = con.prepareStatement(GET_USER);
+        stmt.setString(1, aUsername);
+        
+        ResultSet result = stmt.executeQuery();
+        
+        if(result != null && result.next()) {
+            contact = new Contact(result.getString("firstName"), result.getString("lastName"),
+                result.getString("address"), result.getString("city"), result.getString("state"),
+                result.getString("zip"), result.getString("country"), result.getString("phone"));
+            contact.setContactId(result.getInt("contact_id"));
+            contact.setUserId(result.getInt("user_id"));
+            
+            user = new User(result.getString("username"), result.getString("password"), contact);
+            user.setRole(result.getString("role"));
+            user.setContactId(result.getInt("contact_id"));
+        }
+        
         return user;
     }
 }
