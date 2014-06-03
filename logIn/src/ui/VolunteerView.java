@@ -1,7 +1,7 @@
 package ui;
 
 import dao.ServiceDAO;
-import javax.swing.JTable;
+import java.awt.event.ActionEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -24,6 +24,7 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
         setVisible(true);
         cbSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "City","State","Zip","Country"}));
         buConnection.setEnabled(false);
+        buRemove.setEnabled(false);
         ServiceDAO serviceDao = new ServiceDAO();
         Object[][] data = null;
         try {
@@ -34,7 +35,12 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
         }
       
         tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
-        //tblConnections.getSelectionModel().addListSelectionListener(this);
+        tblConnections.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                buRemove.setEnabled(true);
+            }
+        });
     }
   
     /**
@@ -58,6 +64,7 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
         tblConnections = new javax.swing.JTable();
         laConnections = new javax.swing.JLabel();
         buConnection = new javax.swing.JButton();
+        buRemove = new javax.swing.JButton();
 
         tblAvailable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -109,6 +116,13 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
             }
         });
 
+        buRemove.setText("Remove Conection");
+        buRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buRemoveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,19 +135,23 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
                             .addComponent(laAvailable)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtCriteriaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(buSearch)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(buConnection))
-                                    .addComponent(laConnections)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3)))))
+                                        .addGap(6, 6, 6)
+                                        .addComponent(buRemove))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(cbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtCriteriaValue, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel1)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(buSearch)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(buConnection))
+                                        .addComponent(laConnections)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane3))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(280, 280, 280)
                         .addComponent(laTitle)))
@@ -158,20 +176,27 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buSearch)
                     .addComponent(buConnection))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(laConnections)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buRemove)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void buSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buSearchActionPerformed
+        loadAvailableTable();
+    }//GEN-LAST:event_buSearchActionPerformed
+    
+    private void loadAvailableTable() {
         ServiceDAO serviceDao = new ServiceDAO();
         Object[][] data = null;
         try {
             data = 
-                    serviceDao.getAvailableServices((String)cbSearch.getSelectedItem(),txtCriteriaValue.getText());
+                    serviceDao.getAvailableServices((String)cbSearch.getSelectedItem(),
+                            txtCriteriaValue.getText(), owner.loggedInUser.getUserId());
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -180,8 +205,8 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
         tblAvailable.getSelectionModel().addListSelectionListener(this);
         this.revalidate();
         this.repaint();   
-    }//GEN-LAST:event_buSearchActionPerformed
-
+    }
+    
     private void buConnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buConnectionActionPerformed
         int[] selectedRows = tblAvailable.getSelectedRows();
         ServiceDAO serviceDao = new ServiceDAO();
@@ -205,12 +230,40 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
       
         tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
         tblConnections.getSelectionModel().addListSelectionListener(this);
-        this.revalidate();
-        this.repaint();   
+        
+       loadAvailableTable();
     }//GEN-LAST:event_buConnectionActionPerformed
+
+    private void buRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buRemoveActionPerformed
+        int[] selectedRows = tblConnections.getSelectedRows();
+        ServiceDAO serviceDao = new ServiceDAO();
+        
+        for(int i = 0; i< selectedRows.length; i++) {
+            try {
+                serviceDao.removeConnection(owner.loggedInUser.getUserId(), 
+                        (Integer)tblConnections.getModel().getValueAt(selectedRows[i], 0));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }   
+        }
+        
+        Object[][] data = null;
+        try {
+            data = 
+                    serviceDao.getConnectedServices(owner.loggedInUser.getUserId());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+      
+        tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        tblConnections.getSelectionModel().addListSelectionListener(this);
+        
+       loadAvailableTable();
+    }//GEN-LAST:event_buRemoveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buConnection;
+    private javax.swing.JButton buRemove;
     private javax.swing.JButton buSearch;
     private javax.swing.JComboBox cbSearch;
     private javax.swing.JLabel jLabel1;

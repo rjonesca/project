@@ -96,11 +96,7 @@ public class ServiceDAO {
        return data;
    }
    
-   public Object[][] getAvailableServices() throws Exception {
-       return getAvailableServices("","");
-   }
-   
-   public Object[][] getAvailableServices(String filter, String value) throws Exception {
+   public Object[][] getAvailableServices(String filter, String value, int user_id) throws Exception {
        Object[][] data = null;
        
        String filter_clause = "";
@@ -123,9 +119,11 @@ public class ServiceDAO {
        java.sql.Connection con = Connection.getConnection();
        String sql = "select a.service_id, a.short_desc, "
                + "a.start_date, a.end_date, a.long_desc, b.city, b.state, b.zip, b.country from Service a"
-               + " inner join Location b on a.service_id = b.service_id " + filter_clause;
+               + " inner join Location b on a.service_id = b.service_id " + filter_clause
+               + " and a.service_id not in(select service_id from User_Service where user_id = ?) ";
        
        PreparedStatement stmt = con.prepareStatement(sql);
+       stmt.setInt(1, user_id);
        ResultSet result = stmt.executeQuery();
        
        result.last();
@@ -153,6 +151,15 @@ public class ServiceDAO {
    public void makeConnection(int user_id, int service_id) throws Exception{
        java.sql.Connection con = Connection.getConnection();
        PreparedStatement stmt = con.prepareStatement(INSERT_JOIN);
+       stmt.setInt(1, user_id);
+       stmt.setInt(2, service_id);
+       stmt.executeUpdate();
+   }
+   
+   public void removeConnection(int user_id, int service_id) throws Exception{
+       java.sql.Connection con = Connection.getConnection();
+       PreparedStatement stmt = 
+               con.prepareStatement("delete from User_Service where user_id = ? and service_id = ?");
        stmt.setInt(1, user_id);
        stmt.setInt(2, service_id);
        stmt.executeUpdate();
