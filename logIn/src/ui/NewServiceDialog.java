@@ -3,6 +3,7 @@ package ui;
 import dao.ServiceDAO;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.JPanel;
 import model.Location;
 import model.Service;
 import model.User;
@@ -13,11 +14,12 @@ import model.User;
  */
 public class NewServiceDialog extends javax.swing.JDialog {
     private Main owner;
+    private JPanel caller;
     
     /**
      * Creates new form NewServiceDialog
      */
-    public NewServiceDialog(Main parent, boolean modal) {
+    public NewServiceDialog(Main parent, boolean modal, JPanel caller) {
         super(parent, modal);
         initComponents();
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -25,6 +27,7 @@ public class NewServiceDialog extends javax.swing.JDialog {
         int y = (int) ((dimension.getHeight() - this.getHeight()) / 2);
         this.setLocation(x, y);
         owner = parent;
+        this.caller = caller;
     }
 
     /**
@@ -217,6 +220,7 @@ public class NewServiceDialog extends javax.swing.JDialog {
             e.printStackTrace();
         }
         
+        ((AdministratorView)caller).getCurrentServices();
         this.dispose();
     }//GEN-LAST:event_buSaveActionPerformed
 

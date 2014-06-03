@@ -1,6 +1,6 @@
 package ui;
 
-import javax.swing.JFrame;
+import dao.ServiceDAO;
 import javax.swing.WindowConstants;
 
 /**
@@ -9,11 +9,13 @@ import javax.swing.WindowConstants;
  */
 public class AdministratorView extends javax.swing.JPanel {
     private Main owner = null;
+    private String[] columnNames = {"Service ID","Title","Start Date","End Date","Description"};
     
     public AdministratorView(Main owner) {
         initComponents();
         setVisible(true);
         this.owner = owner;
+        getCurrentServices();
     }
 
     /**
@@ -81,25 +83,26 @@ public class AdministratorView extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(135, 135, 135)
-                            .addComponent(laTitle))
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(laAvailable))
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(laAvailable1))
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(buAddService))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(19, 19, 19)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(laAvailable))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(laAvailable1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(buAddService))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 485, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(191, 191, 191)
+                        .addComponent(laTitle)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,11 +124,24 @@ public class AdministratorView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buAddServiceActionPerformed
-        NewServiceDialog serviceDlg = new NewServiceDialog(owner, true);
+        NewServiceDialog serviceDlg = new NewServiceDialog(owner, true, this);
         serviceDlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         serviceDlg.setVisible(true);
     }//GEN-LAST:event_buAddServiceActionPerformed
-
+    
+    public void getCurrentServices() {
+        ServiceDAO serviceDao = new ServiceDAO();
+        Object[][] data = null;
+        try {
+            data = serviceDao.getAvailableServices();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+      
+        tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        this.revalidate();
+        this.repaint();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buAddService;
