@@ -148,6 +148,38 @@ public class ServiceDAO {
        return data;
    }
    
+   public Object[][] getInterestedVolunteers(int user_id) throws Exception {
+       Object[][] data = null;
+       
+       java.sql.Connection con = Connection.getConnection();
+       String sql = "select a.service_id, c.firstName, c.lastName, c.phone " +
+                "    from User_Service a " +
+                "	inner join User b on a.user_id = b.user_id" +
+                "	inner join Contact c on a.user_id = c.user_id" +
+                "    where b.role = 'Volunteer'" +
+                "    and a.service_id in(select service_id from Service where user_id = ?)";
+       
+       PreparedStatement stmt = con.prepareStatement(sql);
+       stmt.setInt(1, user_id);
+       ResultSet result = stmt.executeQuery();
+       
+       result.last();
+       int rowCount = result.getRow();
+       result.beforeFirst();
+       
+       if(rowCount > 0){
+           data = new Object[rowCount][4];
+           while(result.next()) {
+               data[result.getRow() - 1][0] = result.getInt("service_id");
+               data[result.getRow() - 1][1] = result.getString("firstName");
+               data[result.getRow() - 1][2] = result.getString("lastName");
+               data[result.getRow() - 1][3] = result.getString("phone");
+           }   
+       }
+       
+       return data;
+   }
+   
    public void makeConnection(int user_id, int service_id) throws Exception{
        java.sql.Connection con = Connection.getConnection();
        PreparedStatement stmt = con.prepareStatement(INSERT_JOIN);

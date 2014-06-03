@@ -140,6 +140,16 @@ public class AdministratorView extends javax.swing.JPanel {
         }
       
         tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        
+        try {
+            data = serviceDao.getInterestedVolunteers(owner.loggedInUser.getUserId());
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        
+        String[] columns = {"Service Id", "First Name", "Last Name", "Phone"};
+        tblVolunteers.setModel(new javax.swing.table.DefaultTableModel(data, columns));
+     
         this.revalidate();
         this.repaint();
     }
