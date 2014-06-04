@@ -62,6 +62,19 @@ public class ServiceDAO {
        return service;
    }
    
+   public void deleteService(int serviceId) throws Exception {
+       java.sql.Connection con = Connection.getConnection();
+       PreparedStatement stmt = con.prepareStatement("delete from User_Service where service_id = ?");
+       stmt.setInt(1, serviceId);
+       stmt.executeUpdate();
+       
+       stmt = con.prepareStatement("delete from Service where service_id = ?");
+       stmt.setInt(1, serviceId);
+       stmt.executeUpdate();
+       
+       stmt.close();
+       
+   }
    public Object[][] getConnectedServices(int user_id) throws Exception {
        Object[][] data = null;
        java.sql.Connection con = Connection.getConnection();

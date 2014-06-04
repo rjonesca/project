@@ -2,12 +2,14 @@ package ui;
 
 import dao.ServiceDAO;
 import javax.swing.WindowConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Roshun Jones
  */
-public class AdministratorView extends javax.swing.JPanel {
+public class AdministratorView extends javax.swing.JPanel implements ListSelectionListener {
     private Main owner = null;
     private String[] columnNames = {"Service ID","Title","Start Date","End Date",
         "Description", "City","State","Zip","Country"};
@@ -17,6 +19,9 @@ public class AdministratorView extends javax.swing.JPanel {
         setVisible(true);
         this.owner = owner;
         getCurrentServices();
+        buRemove.setEnabled(false);
+        tblAvailable.getSelectionModel().addListSelectionListener(this);
+        
     }
 
     /**
@@ -36,6 +41,7 @@ public class AdministratorView extends javax.swing.JPanel {
         buAddService = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblAvailable = new javax.swing.JTable();
+        buRemove = new javax.swing.JButton();
 
         laTitle.setText("Administrator View");
 
@@ -79,20 +85,27 @@ public class AdministratorView extends javax.swing.JPanel {
             tblAvailable.getColumnModel().getColumn(4).setHeaderValue("Description");
         }
 
+        buRemove.setText("Remove Service");
+        buRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buRemoveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(laAvailable)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(laAvailable))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(buAddService)
-                            .addComponent(laAvailable1))))
+                            .addComponent(laAvailable1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buRemove)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 19, Short.MAX_VALUE)
@@ -115,7 +128,9 @@ public class AdministratorView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(buAddService)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buAddService)
+                    .addComponent(buRemove))
                 .addGap(12, 12, 12)
                 .addComponent(laAvailable1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -129,6 +144,21 @@ public class AdministratorView extends javax.swing.JPanel {
         serviceDlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         serviceDlg.setVisible(true);
     }//GEN-LAST:event_buAddServiceActionPerformed
+
+    private void buRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buRemoveActionPerformed
+        int[] selectedRows = tblAvailable.getSelectedRows();
+        ServiceDAO serviceDao = new ServiceDAO();
+        
+        for(int i = 0; i< selectedRows.length; i++) {
+            try {
+                serviceDao.deleteService((Integer)tblAvailable.getModel().getValueAt(selectedRows[i], 0));
+            } catch(Exception e) {
+                e.printStackTrace();
+            }   
+        }
+        
+        getCurrentServices();
+    }//GEN-LAST:event_buRemoveActionPerformed
     
     public void getCurrentServices() {
         ServiceDAO serviceDao = new ServiceDAO();
@@ -139,7 +169,14 @@ public class AdministratorView extends javax.swing.JPanel {
             e.printStackTrace();
         }
       
-        tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                if(column == 0)
+                    return false;
+                return true;
+            }
+        });
         
         try {
             data = serviceDao.getInterestedVolunteers(owner.loggedInUser.getUserId());
@@ -148,14 +185,24 @@ public class AdministratorView extends javax.swing.JPanel {
         }
         
         String[] columns = {"Service Id", "First Name", "Last Name", "Phone"};
-        tblVolunteers.setModel(new javax.swing.table.DefaultTableModel(data, columns));
+        tblVolunteers.setModel(new javax.swing.table.DefaultTableModel(data, columns){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
      
         this.revalidate();
         this.repaint();
     }
-
+    
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        buRemove.setEnabled(true);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buAddService;
+    private javax.swing.JButton buRemove;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel laAvailable;

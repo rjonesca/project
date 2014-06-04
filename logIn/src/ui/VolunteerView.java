@@ -34,12 +34,21 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
             e.printStackTrace();
         }
       
-        tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        tblConnections.setModel(new javax.swing.table.DefaultTableModel(data, columnNames) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+            //all cells false
+             return false;
+            }
+        });
+        
         tblConnections.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 buRemove.setEnabled(true);
             }
+            
+            
         });
     }
   
@@ -201,7 +210,13 @@ public class VolunteerView extends javax.swing.JPanel implements ListSelectionLi
             e.printStackTrace();
         }
       
-        tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+        tblAvailable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+            //all cells false
+             return false;
+            }
+        });
         tblAvailable.getSelectionModel().addListSelectionListener(this);
         this.revalidate();
         this.repaint();   
