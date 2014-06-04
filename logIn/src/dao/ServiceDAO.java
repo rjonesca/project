@@ -75,6 +75,52 @@ public class ServiceDAO {
        stmt.close();
        
    }
+   
+   public void updateService(int serviceId, String column, Object value) throws Exception {
+       String col = column;
+       String table = "Service";
+       
+       switch(column) {
+           case"Service ID":
+               col = "service_id";
+               break;
+           case "Title":
+               col = "short_desc";
+               break;
+           case "Start Date":
+               col = "start_date";
+               break;
+           case "End Date":
+               col = "end_date";
+               break;
+           case "Description":
+               col = "long_desc";
+               break;
+           case "City":
+               table = "Location";
+               break;
+           case "State":
+               table = "Location";
+               break;
+           case "Zip":
+               table = "Location";
+               break;
+           case "Country":
+               table = "Location";
+               break;
+       }
+       
+       String sql = "update " + table + " set " + col + " = ? where service_id = ?";
+       java.sql.Connection con = Connection.getConnection();
+       PreparedStatement stmt = con.prepareStatement(sql);
+       if(value instanceof String)
+           stmt.setString(1, (String)value);
+       else if(value instanceof Integer)
+           stmt.setInt(1, (Integer)value);
+       stmt.setInt(2, serviceId);
+       stmt.executeUpdate();
+   }
+   
    public Object[][] getConnectedServices(int user_id) throws Exception {
        Object[][] data = null;
        java.sql.Connection con = Connection.getConnection();

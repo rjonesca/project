@@ -4,12 +4,15 @@ import dao.ServiceDAO;
 import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author Roshun Jones
  */
-public class AdministratorView extends javax.swing.JPanel implements ListSelectionListener {
+public class AdministratorView extends javax.swing.JPanel implements ListSelectionListener, TableModelListener {
     private Main owner = null;
     private String[] columnNames = {"Service ID","Title","Start Date","End Date",
         "Description", "City","State","Zip","Country"};
@@ -21,7 +24,7 @@ public class AdministratorView extends javax.swing.JPanel implements ListSelecti
         getCurrentServices();
         buRemove.setEnabled(false);
         tblAvailable.getSelectionModel().addListSelectionListener(this);
-        
+        tblAvailable.getModel().addTableModelListener(this);
     }
 
     /**
@@ -199,6 +202,23 @@ public class AdministratorView extends javax.swing.JPanel implements ListSelecti
     @Override
     public void valueChanged(ListSelectionEvent e) {
         buRemove.setEnabled(true);
+    }
+    
+    @Override
+	public void tableChanged(TableModelEvent e) {
+	ServiceDAO serviceDao = new ServiceDAO();
+        
+        int row = e.getFirstRow();
+        int column = e.getColumn();
+        TableModel model = (TableModel)e.getSource();
+        String columnName = model.getColumnName(column);
+        Object data = model.getValueAt(row, column);
+        int serviceId = (Integer) model.getValueAt(row, 0);
+        try {
+            serviceDao.updateService(serviceId, columnName, data);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buAddService;
