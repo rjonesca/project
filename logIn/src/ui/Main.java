@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import model.User;
 /**
  *
@@ -231,7 +232,12 @@ public class Main extends javax.swing.JFrame {
                     
                     this.revalidate();
                     this.repaint();
-                }
+                } 
+            }
+            
+            if(user == null || !pass){
+                    JOptionPane.showMessageDialog(this, "Username/Password Incorrect", 
+                            "Medical Care Alliance", JOptionPane.ERROR_MESSAGE);
             }
         }catch(Exception e){
             e.printStackTrace();

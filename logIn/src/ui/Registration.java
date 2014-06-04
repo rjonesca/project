@@ -8,6 +8,7 @@ package ui;
 
 import dao.UserDAO;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import model.Contact;
 import model.User;
 
@@ -108,8 +109,6 @@ public class Registration extends javax.swing.JFrame {
         Username.setText("Username:");
 
         jLabel1.setText("Enter Password:");
-
-        txtPassword.setText("jPasswordField1");
 
         laPhone.setText("Phone:");
 
@@ -277,6 +276,8 @@ public class Registration extends javax.swing.JFrame {
         
         try {
             User loggedInUser = userDAO.createUser(user);
+            JOptionPane.showMessageDialog(this, "User Added.", "Medical Care Alliance", 
+                    JOptionPane.INFORMATION_MESSAGE);
         }catch(Exception e) {
             e.printStackTrace();
         }
