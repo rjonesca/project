@@ -15,7 +15,7 @@ public class ServiceDAO {
    private static String INSERT = "insert into Service(user_id, start_date, end_date, short_desc, long_desc) "
            +                            "values(?,?,?,?,?)";
    
-   private static String INSERT_LOCATION = "insert into Location(service_id, city, zip, country, state) "
+   private static String INSERT_LOCATION = "insert into Location(service_id, city, state, zip, country) "
            +                                    "values(?,?,?,?,?)";
    
    private static String INSERT_JOIN = "insert into User_Service(user_id, service_id) values(?,?) ";
